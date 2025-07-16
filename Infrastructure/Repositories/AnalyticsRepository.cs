@@ -27,8 +27,8 @@ public class AnalyticsService(DataContext context) : IAnalyticsService
             {
                 CarId = g.Key,
                 UsagePercentage = g.Sum(r =>
-                    (Math.Min(r.EndDate.Ticks, endDate.Ticks) - Math.Max(r.StartDate.Ticks, startDate.Ticks))
-                    ) / TimeSpan.TicksPerDay / totalDays * 100
+                    (Math.Min(r.EndDate.Ticks, endDate.Ticks) - Math.Max(r.StartDate.Ticks, startDate.Ticks)
+                    ) / TimeSpan.TicksPerDay / totalDays * 100)
             }).ToListAsync();
 
         return usage;

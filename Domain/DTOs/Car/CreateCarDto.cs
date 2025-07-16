@@ -6,4 +6,5 @@ public class CreateCarDto
     public string Manufacturer { get; set; }
     public int Year { get; set; }
     public decimal PricePerDay { get; set; }
+    public int BranchId { get; set; }
 }

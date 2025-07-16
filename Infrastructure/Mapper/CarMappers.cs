@@ -12,7 +12,8 @@ public static class CarMappers
             Model = createCarDto.Model,
             Manufacturer = createCarDto.Manufacturer,
             Year = createCarDto.Year,
-            PricePerDay = createCarDto.PricePerDay
+            PricePerDay = createCarDto.PricePerDay,
+            BranchId = createCarDto.BranchId
         };
     }
 
@@ -23,5 +24,6 @@ public static class CarMappers
         car.Manufacturer = updateCarDto.Manufacturer;
         car.Year = updateCarDto.Year;
         car.PricePerDay = updateCarDto.PricePerDay;
+        car.BranchId = updateCarDto.BranchId;
     }
 }
