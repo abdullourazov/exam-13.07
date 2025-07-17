@@ -17,12 +17,6 @@ public class CarRepository(DataContext context) : ICarRepository
         return await context.SaveChangesAsync();
     }
 
-    public async Task<int> DeleteAsync(Car car)
-    {
-        context.Cars.Remove(car);
-        return await context.SaveChangesAsync();
-    }
-
     public async Task<List<Car>> GetAllAsync()
     {
         return await context.Cars.ToListAsync();
@@ -34,8 +28,16 @@ public class CarRepository(DataContext context) : ICarRepository
         return car;
     }
 
- 
-
+    public async Task<int> UpdateAsync(Car car)
+    {
+        context.Cars.Update(car);
+        return await context.SaveChangesAsync();
+    }
+    public async Task<int> DeleteAsync(Car car)
+    {
+        context.Cars.Remove(car);
+        return await context.SaveChangesAsync();
+    }
 
     public async Task<PagedResponse<List<Car>>> SearchAsync(CarFilter filter)
     {
@@ -60,10 +62,6 @@ public class CarRepository(DataContext context) : ICarRepository
         return await pagination.GetPagedResponseAsync(filter.PageNumber, filter.PageSize);
     }
 
-    public async Task<int> UpdateAsync(Car car)
-    {
-        context.Cars.Update(car);
-        return await context.SaveChangesAsync();
-    }
+
 
 }

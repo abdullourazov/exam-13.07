@@ -57,6 +57,13 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisCache");
+    options.InstanceName = "exam-12.07";
+});
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

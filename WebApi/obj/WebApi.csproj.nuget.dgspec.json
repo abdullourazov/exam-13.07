@@ -147,6 +147,10 @@
               "target": "Package",
               "version": "[9.0.5, )"
             },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[9.0.7, )"
+            },
             "Npgsql": {
               "target": "Package",
               "version": "[9.0.3, )"

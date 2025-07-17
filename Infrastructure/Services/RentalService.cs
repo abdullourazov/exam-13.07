@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain.ApiResponse;
 using Domain.DTOs.Car;
 using Domain.DTOs.Rental;
+using Domain.Entities;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
 using Infrastructure.Mapper;
@@ -14,7 +15,8 @@ namespace Infrastructure.Services;
 public class RentalService(DataContext context,
         IRentalRepository rentalRepository,
         ICarRepository carRepository,
-        IMapper mapper) : IRentalService
+        IMapper mapper,
+        IRedisCasheService redisCasheService) : IRentalService
 {
     public async Task<Response<string>> CreateRentalAsync(CreateRentalDto createRentalDto)
     {
@@ -40,6 +42,9 @@ public class RentalService(DataContext context,
         rental.TotalCost = totalCost;
 
         var result = await rentalRepository.CreateAsync(rental);
+
+        await redisCasheService.DeleteData("rental");
+
         return result == 0
             ? Response<string>.Error(HttpStatusCode.InternalServerError, "Something went wrong")
             : Response<string>.Success(message: "Rental created successfully");
@@ -66,6 +71,21 @@ public class RentalService(DataContext context,
 
     public async Task<Response<List<GetRentalDto>>> GetRentalsAsync()
     {
+        const string cashKey = "rental";
+
+        var rentalCashe = await redisCasheService.GetData<List<GetRentalDto>>(cashKey);
+
+        if (rentalCashe == null)
+        {
+            var rental = await rentalRepository.GetAllAsync();
+            rentalCashe = rental.Select(r => new GetRentalDto
+            {
+                Id = r.Id
+            }).ToList();
+
+            await redisCasheService.SetData(cashKey, rentalCashe, 1);
+        }
+
         var rentals = await context.Rentals
             .AsNoTracking()
             .Include(r => r.Car)
